@@ -1,0 +1,121 @@
+name: url-health-checker
+
+x-backend: &backend
+  build:
+    context: .
+    target: backend
+  environment:
+    DATABASE_URL: postgres://uhc:uhc@postgres:5432/uhc
+    REDIS_URL: redis://redis:6379
+  restart: unless-stopped
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: uhc
+      POSTGRES_PASSWORD: uhc
+      POSTGRES_DB: uhc
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U uhc -d uhc"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  # Runs the SQL migrations once; api and worker start only after it succeeds.
+  migrate:
+    <<: *backend
+    restart: "no"
+    command: ["npm", "run", "migrate", "-w", "@uhc/api"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # Fastify API. Two replicas by default to demonstrate multi-instance correctness;
+  # not exposed directly, reach it through the gateway on :4000.
+  api:
+    <<: *backend
+    command: ["npm", "run", "start", "-w", "@uhc/api"]
+    environment:
+      DATABASE_URL: postgres://uhc:uhc@postgres:5432/uhc
+      REDIS_URL: redis://redis:6379
+      PORT: "4000"
+    deploy:
+      replicas: 2
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:4000/health || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
+
+  # nginx load balancer in front of the API replicas (round robin, SSE-friendly).
+  gateway:
+    image: nginx:1.27-alpine
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # BullMQ workers, separate process from the API. Two replicas by default: the
+  # 10 req/s and 5-in-flight limits are global and still hold across both.
+  worker:
+    <<: *backend
+    command: ["npm", "run", "start", "-w", "@uhc/worker"]
+    deploy:
+      replicas: 2
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+
+  # Deterministic target for demos; records the request rate and concurrency it sees.
+  mock:
+    <<: *backend
+    command: ["npm", "run", "start", "-w", "@uhc/mock-target"]
+    environment:
+      PORT: "4100"
+    ports:
+      - "4100:4100"
+
+  web:
+    build:
+      context: .
+      target: web
+      args:
+        # Empty => the browser derives the API origin from the host serving the page, so
+        # http://localhost:3000 and http://<lan-ip>:3000 both work with no rebuild.
+        NEXT_PUBLIC_API_URL: "${NEXT_PUBLIC_API_URL-}"
+        NEXT_PUBLIC_MOCK_URL: http://mock:4100
+    environment:
+      API_INTERNAL_URL: http://gateway:4000
+      NODE_ENV: production
+    ports:
+      - "3000:3000"
+    depends_on:
+      gateway:
+        condition: service_started
+    restart: unless-stopped
+
+volumes:
+  pgdata:

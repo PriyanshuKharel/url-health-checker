@@ -1,0 +1,21 @@
+{
+  "name": "url-health-checker",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*",
+    "tools/*"
+  ],
+  "scripts": {
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "migrate": "npm run migrate -w @uhc/api",
+    "dev:api": "npm run dev -w @uhc/api",
+    "dev:worker": "npm run dev -w @uhc/worker",
+    "dev:web": "npm run dev -w @uhc/web",
+    "dev:mock": "npm run dev -w @uhc/mock-target",
+    "verify": "npm run verify -w @uhc/api --"
+  },
+  "engines": {
+    "node": ">=20.10"
+  }
+}

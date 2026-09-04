@@ -1,0 +1,11 @@
+# Optional override for host-side development: publishes Postgres and Redis so you can
+# run `npm run dev:api` / `dev:worker` / `dev:web` directly on your machine.
+#
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml up postgres redis
+services:
+  postgres:
+    ports:
+      - "5432:5432"
+  redis:
+    ports:
+      - "6379:6379"

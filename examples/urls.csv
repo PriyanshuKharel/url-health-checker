@@ -1,0 +1,25 @@
+Page,URL,Owner,Why this one is here
+Example page,https://example.com,Docs,Healthy page with a short title
+Wikipedia portal,https://www.wikipedia.org,Research,Healthy page
+GitHub,https://github.com,Engineering,Healthy page with a long title
+MDN Web Docs,https://developer.mozilla.org,Engineering,Redirects to a localised path
+Node.js,https://nodejs.org,Engineering,Redirects to a localised path
+Fastify,https://fastify.dev,Engineering,Healthy page
+Redis,https://redis.io,Engineering,Healthy page
+PostgreSQL,https://www.postgresql.org,Engineering,Healthy page
+BullMQ docs,https://docs.bullmq.io,Engineering,Healthy page
+Next.js,https://nextjs.org,Engineering,Healthy page
+TypeScript,https://www.typescriptlang.org,Engineering,Healthy page
+Hacker News,https://news.ycombinator.com,Research,Healthy page
+IANA,https://www.iana.org,Docs,Healthy page
+RFC Editor,https://www.rfc-editor.org,Docs,Slower response time
+Google,https://www.google.com,Marketing,Healthy page
+GitHub over plain HTTP,http://github.com,Engineering,Upgrades to HTTPS - final URL differs from the one submitted
+W3C standards index,http://www.w3.org/TR,Docs,Redirect chain - each hop costs a rate-limit token
+Retired repo link,https://github.com/anthropics/this-repo-does-not-exist-9f3k2,Engineering,Answers 404 - a completed check whose answer is 404
+Removed doc page,https://developer.mozilla.org/en-US/docs/this-page-was-removed-9f3k2,Engineering,Answers 404 - a completed check whose answer is 404
+Expired certificate,https://expired.badssl.com,Security,Permanent failure - retrying a bad certificate is pointless
+Self-signed certificate,https://self-signed.badssl.com,Security,Permanent failure - fails on the first attempt
+Decommissioned host,https://this-host-was-decommissioned-9f3k2.invalid,Legacy,Permanent failure - the name does not resolve
+Failing service,https://httpstat.us/500,Vendor,Server error - retried 3 times with growing delays
+Overloaded service,https://httpstat.us/503,Vendor,Server error - retried 3 times with growing delays

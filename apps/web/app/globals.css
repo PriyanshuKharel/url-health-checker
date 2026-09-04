@@ -1,0 +1,274 @@
+:root {
+  --bg: #f6f7f9;
+  --card: #fff;
+  --border: #e2e5ea;
+  --text: #1c2230;
+  --muted: #6b7280;
+  --accent: #2563eb;
+  --ok: #16a34a;
+  --bad: #dc2626;
+  --warn: #d97706;
+  --grey: #9ca3af;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.45 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+a {
+  color: var(--accent);
+}
+
+.topbar {
+  background: #111827;
+  color: #fff;
+  padding: 12px 24px;
+}
+.topbar .brand {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 24px 60px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+.card h1,
+.card h2 {
+  margin-top: 0;
+}
+
+label {
+  display: block;
+  margin: 10px 0;
+  font-weight: 500;
+}
+input,
+textarea,
+select {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font: inherit;
+}
+textarea {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+}
+select {
+  display: inline-block;
+  width: auto;
+  margin: 0 0 0 8px;
+}
+
+button {
+  padding: 8px 14px;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  background: var(--accent);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+button.secondary {
+  background: #fff;
+  color: var(--accent);
+}
+button.danger {
+  background: var(--bad);
+  border-color: var(--bad);
+}
+.file {
+  display: inline-block;
+  margin: 0;
+  padding: 8px 14px;
+  border: 1px dashed var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.file input {
+  display: none;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 10px 0;
+}
+.row.between {
+  justify-content: space-between;
+}
+
+.muted {
+  color: var(--muted);
+  font-weight: 400;
+}
+.small {
+  font-size: 12px;
+}
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.error {
+  color: var(--bad);
+}
+
+.table-wrap {
+  overflow-x: auto;
+  padding: 0;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th,
+td {
+  text-align: left;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+th {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+}
+td.url {
+  max-width: 380px;
+  word-break: break-all;
+}
+td.title {
+  max-width: 260px;
+}
+tr.row-running {
+  background: #eff6ff;
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.badge-queued {
+  background: #f3f4f6;
+  color: #374151;
+}
+.badge-running {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+.badge-completed {
+  background: #dcfce7;
+  color: #15803d;
+}
+.badge-failed {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+.badge-cancelled {
+  background: #e5e7eb;
+  color: #4b5563;
+}
+
+.http-ok {
+  color: var(--ok);
+  font-weight: 600;
+}
+.http-bad {
+  color: var(--bad);
+  font-weight: 600;
+}
+.c-completed {
+  color: var(--ok);
+}
+.c-failed {
+  color: var(--bad);
+}
+.c-running {
+  color: var(--accent);
+}
+.c-cancelled {
+  color: var(--grey);
+}
+
+.live {
+  font-size: 12px;
+  font-weight: 600;
+}
+.live-live {
+  color: var(--ok);
+}
+.live-connecting {
+  color: var(--warn);
+}
+.live-reconnecting {
+  color: var(--bad);
+}
+
+.progress {
+  margin: 12px 0;
+}
+.progress.compact {
+  margin: 0 0 4px;
+}
+.progress-track {
+  display: flex;
+  height: 10px;
+  overflow: hidden;
+  background: #e5e7eb;
+  border-radius: 999px;
+}
+.progress.compact .progress-track {
+  height: 6px;
+}
+.seg {
+  transition: width 0.3s ease;
+}
+.seg-completed {
+  background: var(--ok);
+}
+.seg-failed {
+  background: var(--bad);
+}
+.seg-cancelled {
+  background: var(--grey);
+}
+.seg-running {
+  background: var(--accent);
+  opacity: 0.5;
+}
+.progress-meta {
+  margin-top: 6px;
+  color: var(--muted);
+}
